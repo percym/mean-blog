@@ -1,9 +1,10 @@
-import { Component , EventEmitter , Output } from '@angular/core';
+import { Component ,Output } from '@angular/core';
 import { post } from 'selenium-webdriver/http';
 import {Post} from '../post.model'
 import { NgForm } from '@angular/forms';
-import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
+import {PostsService} from '../posts.service';
 
+import { from } from 'rxjs';
 @Component({
     selector:'app-post-create',
     templateUrl:'./post-create.component.html',
@@ -12,15 +13,18 @@ import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_di
 export class PostCreateComponent{
     enteredTitle= '';
     enteredContent= '';
-    @Output() postCreated = new EventEmitter<Post>();
 
+    constructor(public postsService: PostsService){
+
+    }
     onAddPost(postForm:NgForm){
         if(postForm.invalid){
             return;
         }
-        const post :Post ={
-            title:postForm.value.title,
-             content:postForm.value.content};
-        this.postCreated.emit(post);
+        // const post :Post ={
+        //     title:postForm.value.title,
+        //      content:postForm.value.content
+        // };
+        this.postsService.createPosts(postForm.value.title ,postForm.value.content );
     }
 }
