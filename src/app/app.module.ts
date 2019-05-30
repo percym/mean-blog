@@ -11,7 +11,8 @@ import {MatInputModule ,
    MatCardModule , 
    MatButtonModule , 
    MatToolbarModule,
-   MatExpansionModule
+   MatExpansionModule,
+
   } from '@angular/material'
 import { HeaderComponent } from './header/header.component';
 import { PostListComponent } from './posts/post-list/post-list.component';
@@ -32,7 +33,7 @@ import { PostListComponent } from './posts/post-list/post-list.component';
     MatCardModule,
     MatButtonModule,
     MatToolbarModule,
-    MatExpansionModule
+    MatExpansionModule, 
   ],
   providers: [],
   bootstrap: [AppComponent]
