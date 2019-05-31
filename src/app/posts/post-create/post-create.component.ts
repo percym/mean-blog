@@ -5,6 +5,7 @@ import { NgForm } from '@angular/forms';
 import {PostsService} from '../posts.service';
 
 import { from } from 'rxjs';
+import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 @Component({
     selector:'app-post-create',
     templateUrl:'./post-create.component.html',
@@ -26,5 +27,6 @@ export class PostCreateComponent{
         //      content:postForm.value.content
         // };
         this.postsService.createPosts(postForm.value.title ,postForm.value.content );
+        postForm.reset();
     }
 }
