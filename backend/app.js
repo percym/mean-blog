@@ -1,5 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose =require('mongoose');
+
+const Post = require('./models/post')
+
+
+mongoose.connect('mongodb://localhost/first', {useNewUrlParser: true})
+.then(()=>{
+    console.log('connected to db');
+})
+.catch(()=>{
+    console.log('connection failed');
+});
 
 const app = express();
 
@@ -9,7 +21,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use((req , res , next)=>{
     res.setHeader("Access-Control-Allow-Origin","*");
     res.setHeader(
-        "Access-Control-Allow-Header",
+        "Access-Control-Allow-Headers",
         "Origin,X-Requested-With ,Content-Type, Accept");
     res.setHeader(
             "Access-Control-Allow-Method",
@@ -18,7 +30,10 @@ app.use((req , res , next)=>{
 });
 
 app.post('/api/posts',(req, res, next)=>{
-   const post = req.body;
+   const post = new Post({
+       title:req.body.title,
+       content: req.body.content
+   });
    console.log(post);
    res.status(201).json({
        messsage:'post added'
