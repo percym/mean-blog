@@ -29,7 +29,6 @@ export class PostsService{
             console.log('____________________posts');
             console.log(transformedPosts);
             this.posts = transformedPosts;
-            debugger
             this.postsUpdated.next([...this.posts]);
         });
     }
@@ -50,7 +49,10 @@ export class PostsService{
     deletePost(postId:String ){
         this.http.delete('http://localhost:3000/api/posts/'+postId)
         .subscribe(()=>{
-            console.log('deleted');
+            const updatedPosts = this.posts.filter(post => post.id !==postId);
+            this.posts = updatedPosts;
+            this.postsUpdated.next([...this.posts]);
+
         })
     }
 }
