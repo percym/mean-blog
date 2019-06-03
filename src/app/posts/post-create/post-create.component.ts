@@ -1,7 +1,7 @@
 import { Component ,Output, OnInit } from '@angular/core';
 import { post } from 'selenium-webdriver/http';
 import {Post} from '../post.model'
-import { NgForm } from '@angular/forms';
+import { NgForm, FormGroup, FormControl , Validators } from '@angular/forms';
 import {PostsService} from '../posts.service';
 
 import { from } from 'rxjs';
@@ -20,6 +20,7 @@ export class PostCreateComponent  implements OnInit{
     private postId :string;
     post :Post;
     isLoading = false;
+    form:FormGroup;
 
     
     constructor(public postsService: PostsService , public route :ActivatedRoute){
@@ -27,6 +28,11 @@ export class PostCreateComponent  implements OnInit{
     }
 
     ngOnInit(): void {
+        this.form = new FormGroup({
+            'title':new FormControl(null,{
+                validators:[Validators.required,Validators.minLength(3)]}),
+             'content': new FormControl(null,Validators.required)   
+        });
         this.route.paramMap.subscribe((paramMap : ParamMap)=>{
                 if(paramMap.has('postId')){
                     this.mode ='edit';
@@ -35,8 +41,17 @@ export class PostCreateComponent  implements OnInit{
                     this.postsService.getPost(this.postId)
                     .subscribe(postData =>{
                         this.isLoading =false;
-                        this.post = {id:postData._id , title:postData.title, content:postData.content}
-                    });                                                                                                                                                 
+                        this.post = {
+                            id:postData._id ,
+                             title:postData.title,
+                              content:postData.content
+                            };
+                       
+                    this.form.setValue({
+                        title:this.post.title,
+                         content: this.post.content
+                        }); 
+                    });                                                                                                                                             
                 }else{
                     this.mode ='create';
                     this.postId = null;
@@ -45,8 +60,8 @@ export class PostCreateComponent  implements OnInit{
 
     }
 
-    onSavePost(postForm:NgForm){
-        if(postForm.invalid){
+    onSavePost(){
+        if(this.form.invalid){
             return;
         }
         // const post :Post ={
@@ -55,11 +70,18 @@ export class PostCreateComponent  implements OnInit{
         // };
         this.isLoading =true;
         if(this.mode === 'create'){
-            this.postsService.createPosts(postForm.value.title ,postForm.value.content );
+            this.postsService.createPosts(
+                this.form.value.title
+                 ,this.form.value.content 
+                 );
            
         }else{
-            this.postsService.updatePost(this.postId,postForm.value.title ,postForm.value.content );
+            this.postsService.updatePost(
+                this.postId,
+                this.form.value.title ,
+                this.form.value.content
+                );
         }
-        postForm.reset();
+        this.form.reset();
     }
 }
