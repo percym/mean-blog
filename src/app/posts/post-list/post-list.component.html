@@ -7,7 +7,7 @@
         <mat-action-row>
                 <button type="submit" mat-button color="primary">Edit</button>
         
-                    <button type="submit" mat-button color="warn">Delete</button>
+                    <button type="submit" mat-button color="warn" (click)="onDelete(post.id)">Delete</button>
         </mat-action-row>
     </mat-expansion-panel>
 </mat-accordion> 

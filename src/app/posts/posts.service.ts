@@ -2,7 +2,6 @@ import {Post} from './post.model';
 import { Injectable } from '@angular/core';
 import {Subject} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { post } from 'selenium-webdriver/http';
 import { importType } from '@angular/compiler/src/output/output_ast';
 import {map} from 'rxjs/operators';
 import { Content } from '@angular/compiler/src/render3/r3_ast';
@@ -17,19 +16,20 @@ export class PostsService{
     }
     getPosts(){
         this.http.get<{message:string, posts: any}>('http://localhost:3000/api/posts')
-        // .pipe(map((postData)=>{
-        //     return postData.posts.map(post=> {
-        //         return {
-        //         title : post.title,
-        //         content : post.content,
-        //         id : post._id 
-        //         }
-        //     });
-        // }))
-        .subscribe((transformedPosts)=>{
+        .pipe(map((postData)=>{
+            return postData.posts.map(post=> {
+                return {
+                title : post.title,
+                content : post.content,
+                id : post._id 
+                }
+            });
+        }))
+        .subscribe(transformedPosts=>{
             console.log('____________________posts');
             console.log(transformedPosts);
-            this.posts = transformedPosts.posts;
+            this.posts = transformedPosts;
+            debugger
             this.postsUpdated.next([...this.posts]);
         });
     }
@@ -45,6 +45,12 @@ export class PostsService{
              this.posts.push(post);
              this.postsUpdated.next([...this.posts]);
          });
-        
+    }
+
+    deletePost(postId:String ){
+        this.http.delete('http://localhost:3000/api/posts/'+postId)
+        .subscribe(()=>{
+            console.log('deleted');
+        })
     }
 }
