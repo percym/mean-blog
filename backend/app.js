@@ -33,11 +33,14 @@ app.post('/api/posts',(req, res, next)=>{
        title:req.body.title,
        content: req.body.content
    });
-   console.log(post);
-   post.save();
-   res.status(201).json({
-       messsage:'post added'
-   })
+//    console.log(post);
+   post.save().then((createdPost) =>{
+    res.status(201).json({
+        messsage:'post added',
+        postId:createdPost._id
+    })
+   } );
+   
 });
 app.get('/api/posts',(req, res, next)=>{
     // posts=[
@@ -46,7 +49,7 @@ app.get('/api/posts',(req, res, next)=>{
     //         {id:'3',title:'third Post', content:'this is the third post content'},
     //     ];
     Post.find().then(documents => {
-        console.log(documents);
+        // console.log(documents);
         res.status(200).json({
             messsage:'Posts fetched successfully !',
             posts:documents
@@ -54,7 +57,7 @@ app.get('/api/posts',(req, res, next)=>{
     });
 
     app.delete('/api/posts/:id', (req , res , next)=>{
-        console.log(req.params.id);
+        // console.log(req.params.id);
         Post.deleteOne({_id:req.params.id}).then((result)=>{
             console.log(result);
         }
