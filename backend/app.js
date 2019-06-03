@@ -24,9 +24,10 @@ app.use((req , res , next)=>{
         "Origin,X-Requested-With ,Content-Type, Accept");
     res.setHeader(
             "Access-Control-Allow-Methods",
-            "GET, POST, PATCH, DELETE,OPTIONS");    
+            "GET, POST, PUT, PATCH, DELETE,OPTIONS");    
             next();
 });
+
 
 app.post('/api/posts',(req, res, next)=>{
    const post = new Post({
@@ -42,6 +43,7 @@ app.post('/api/posts',(req, res, next)=>{
    } );
    
 });
+
 app.get('/api/posts',(req, res, next)=>{
     // posts=[
     //         {id:'1',title:'First Post', content:'this is the first post content'},
@@ -55,6 +57,20 @@ app.get('/api/posts',(req, res, next)=>{
             posts:documents
         });
     });
+ });
+
+ app.put('/api/posts/:id', (req,res  , next)=>{
+     const post = new Post({
+         _id:req.body.id,
+        title:req.body.title,
+        content: req.body.content
+     });
+
+     Post.updateOne({_id:req.params.id },post).then(result =>{
+         console.log(result);
+         res.status(200).json({messsage:"update successfull"});
+     })
+ });
 
     app.delete('/api/posts/:id', (req , res , next)=>{
         // console.log(req.params.id);
@@ -63,8 +79,8 @@ app.get('/api/posts',(req, res, next)=>{
         }
         );
         res.status(200).json({messsage:'Post deleted!'});
-    })
+    });
   
-});
+
 
 module.exports = app;
