@@ -12,6 +12,7 @@ import {MatInputModule ,
    MatButtonModule , 
    MatToolbarModule,
    MatExpansionModule,
+   MatProgressSpinnerModule
 
   } from '@angular/material'
   import {HttpClientModule} from '@angular/common/http';
@@ -36,7 +37,8 @@ import { PostsService } from './posts/posts.service';
     MatButtonModule,
     MatToolbarModule,
     MatExpansionModule, 
-    HttpClientModule
+    HttpClientModule,
+    MatProgressSpinnerModule
   ],
   providers: [PostsService],
   bootstrap: [AppComponent]
