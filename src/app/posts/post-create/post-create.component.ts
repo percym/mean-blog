@@ -1,12 +1,12 @@
 import { Component ,Output, OnInit } from '@angular/core';
 import { post } from 'selenium-webdriver/http';
 import {Post} from '../post.model'
-import { NgForm, FormGroup, FormControl , Validators } from '@angular/forms';
+import { NgForm, FormGroup, FormControl , Validators, NG_ASYNC_VALIDATORS } from '@angular/forms';
 import {PostsService} from '../posts.service';
 
 import { from } from 'rxjs';
-import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import {mimeType} from './mime-type.validator'
 @Component({
     selector:'app-post-create',
     templateUrl:'./post-create.component.html',
@@ -32,8 +32,8 @@ export class PostCreateComponent  implements OnInit{
         this.form = new FormGroup({
             'title':new FormControl(null,{
                 validators:[Validators.required,Validators.minLength(3)]}),
-             'content': new FormControl(null,Validators.required) ,
-             'image': new FormControl(null,Validators.required)    
+             'content': new FormControl(null,{validators:[Validators.required]}),
+             'image': new FormControl(null,{validators:[Validators.required],asyncValidators:[mimeType]})    
         });
         this.route.paramMap.subscribe((paramMap : ParamMap)=>{
                 if(paramMap.has('postId')){
