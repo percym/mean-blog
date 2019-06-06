@@ -51,12 +51,16 @@ router.post('',multer({storage:storage}).single("image"),(req, res, next)=>{
  });
  
  router.get('',(req, res, next)=>{
-     // posts=[
-     //         {id:'1',title:'First Post', content:'this is the first post content'},
-     //         {id:'2',title:'Second Post', content:'this is the second post content'},
-     //         {id:'3',title:'third Post', content:'this is the third post content'},
-     //     ];
-     Post.find().then(documents => {
+     const pageSize = +req.query.pageSize;
+     const currentPage = +req.query.page;
+     const postQuery = Post.find();
+
+     if(pageSize && currentPage){
+        postQuery
+        .skip(pageSize * (currentPage -1))
+        .limit(pageSize);
+     }
+     postQuery.then(documents => {
          // console.log(documents);
          res.status(200).json({
              messsage:'Posts fetched successfully !',
