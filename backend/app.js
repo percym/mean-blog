@@ -5,6 +5,7 @@ const mongoose =require('mongoose');
 
 
 const postroutes = require('./routes/posts');
+const userroutes = require('./routes/user');
 
 mongoose.connect('mongodb://localhost/first', {useNewUrlParser: true})
 .then(()=>{
@@ -33,5 +34,5 @@ app.use((req , res , next)=>{
 });
 
 app.use('/api/posts',postroutes);
-
+app.use('/api/user',userroutes);
 module.exports = app;
