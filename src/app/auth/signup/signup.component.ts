@@ -22,6 +22,6 @@ export class SignUpComponent {
         }else{
             this.authService.createuser(form.value.email, form.value.password);
         }
-        
+
     }
 }5
