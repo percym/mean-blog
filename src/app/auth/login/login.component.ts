@@ -16,11 +16,10 @@ export class LoginComponent {
     }
 
     onLogin(form:NgForm){
-        this.authService.login(form.value.email, form.value.password);
+      
     if(form.invalid){
             return;
-        }else{
-           
         }
+        this.authService.login(form.value.email, form.value.password);    
     }
 }
