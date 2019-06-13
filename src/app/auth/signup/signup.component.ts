@@ -20,6 +20,7 @@ export class SignUpComponent {
         if(form.invalid){
             return;
         }else{
+            this.isLoading =true;
             this.authService.createuser(form.value.email, form.value.password);
         }
 
