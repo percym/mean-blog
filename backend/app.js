@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const mongoose =require('mongoose');
 
 
+
 const postroutes = require('./routes/posts');
 const userroutes = require('./routes/user');
 
@@ -16,6 +17,10 @@ mongoose.connect('mongodb://localhost/first', {useNewUrlParser: true})
 });
 
 const app = express();
+
+const expressSwagger = require('express-swagger-generator')(app);
+const swaggerOptions = require('./swagger');
+expressSwagger(swaggerOptions);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
