@@ -27,15 +27,14 @@ const storage = multer.diskStorage({
     }
 });
 
+
 router.post('',checkAuth, multer({storage:storage}).single("image"),(req, res, next)=>{
     const url =req.protocol + '://' +req.get('host');
     const post = new Post({
         title:req.body.title,
-        content: req.body.content,
-        imagePath:url + "/images/" +req.file.filename
-    });
-    console.log(req.userData);
-    return res.status(200).json({
+        content:   req.body.content,
+        imagePath:url + "/images/" +req.file.filename,
+        creator: req.userData.userId
     });
  //    console.log(post);
     post.save().then((createdPost) =>{
@@ -44,10 +43,6 @@ router.post('',checkAuth, multer({storage:storage}).single("image"),(req, res, n
          post:{
             ...createdPost,
              id:createdPost._id,
-            //  title:createdPost.title,
-            //  content:createdPost.content,
-            //  imagepath:createdPost.imagePath
-
          }
      });
     });
@@ -94,18 +89,28 @@ router.post('',checkAuth, multer({storage:storage}).single("image"),(req, res, n
          title:req.body.title,
          content: req.body.content
       });
- 
-      Post.updateOne({_id:req.params.id },post).then(result =>{
-            //  console.log(result);
-             res.status(200).json({messsage:"update successfull"});
+      
+      Post.updateOne({_id:req.params.id,creator:req.userData.userId },post).then(result =>{
+             console.log(result);
+             if(result.nmodified>0){
+                return res.status(200).json({messsage:"update successfull"});
+            }else{
+                return res.status(401).json({messsage:"unauthorised "});
+            }
       })
   });
- 
+
   router.delete('/:id', checkAuth ,(req , res , next)=>{
          // console.log(req.params.id);
-         Post.deleteOne({_id:req.params.id}).then((result)=>{
+         Post.deleteOne({_id:req.params.id, creator:req.userData.userId}).then((result)=>{
              console.log(result);
-         }
+             if(result.n>0){
+                return res.status(200).json({messsage:"deletion successfull"});
+            }else{
+                return res.status(401).json({messsage:"unauthorised "});
+            }
+             
+            }
          );
          res.status(200).json({messsage:'Post deleted!'});
      });

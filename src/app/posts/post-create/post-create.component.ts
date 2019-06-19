@@ -1,5 +1,4 @@
 import { Component ,Output, OnInit } from '@angular/core';
-import { post } from 'selenium-webdriver/http';
 import {Post} from '../post.model'
 import { NgForm, FormGroup, FormControl , Validators, NG_ASYNC_VALIDATORS } from '@angular/forms';
 import {PostsService} from '../posts.service';
@@ -19,6 +18,7 @@ export class PostCreateComponent  implements OnInit{
     private mode = 'create';
     private postId :string;
     post :Post;
+    imagePath:string;
     isLoading = false;
     form:FormGroup;
     imagePreview:any;
@@ -47,13 +47,15 @@ export class PostCreateComponent  implements OnInit{
                             id:postData._id ,
                             title:postData.title,
                             content:postData.content,
-                            imagePath:null
+                            imagePath:postData.imagePath
 
                             };
+                            console.log('------------formdata-----' + this.post);
                        
                     this.form.setValue({
                         title:this.post.title,
-                         content: this.post.content
+                        image: this.post.imagePath,
+                        content: this.post.content
                         }); 
                     });                                                                                                                                             
                 }else{
