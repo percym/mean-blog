@@ -35,7 +35,7 @@ export class AuthService{
             this.isAuthenticated =true;
             const now = new Date();
             console.log(" ---- now--- " + now);
-            const expirationDate= new Date(now.getTime()+ (expiresInDuration * 1000));
+            const expirationDate= new Date(now.getTime() + (expiresInDuration * 4000));
             console.log(" ---- expirationDate--- " + expirationDate);
             this.saveAuthData(this.token,expirationDate);
             this.router.navigate(['/']);
@@ -81,6 +81,7 @@ export class AuthService{
     saveAuthData(token:string , expirationDate:Date){
         localStorage.setItem('token',token);
         localStorage.setItem('expiration',expirationDate.toISOString());
+
     }
 
     clearAuthData(){

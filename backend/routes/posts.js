@@ -34,6 +34,9 @@ router.post('',checkAuth, multer({storage:storage}).single("image"),(req, res, n
         content: req.body.content,
         imagePath:url + "/images/" +req.file.filename
     });
+    console.log(req.userData);
+    return res.status(200).json({
+    });
  //    console.log(post);
     post.save().then((createdPost) =>{
      res.status(201).json({
@@ -46,7 +49,7 @@ router.post('',checkAuth, multer({storage:storage}).single("image"),(req, res, n
             //  imagepath:createdPost.imagePath
 
          }
-     })
+     });
     });
     
  });
@@ -93,7 +96,7 @@ router.post('',checkAuth, multer({storage:storage}).single("image"),(req, res, n
       });
  
       Post.updateOne({_id:req.params.id },post).then(result =>{
-             console.log(result);
+            //  console.log(result);
              res.status(200).json({messsage:"update successfull"});
       })
   });
