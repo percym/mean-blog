@@ -6,6 +6,7 @@ import { importType } from '@angular/compiler/src/output/output_ast';
 import {map} from 'rxjs/operators';
 import { Content } from '@angular/compiler/src/render3/r3_ast';
 import { Router } from '@angular/router';
+import { identifierModuleUrl } from '@angular/compiler';
 
 @Injectable({providedIn:'root'})
 export class PostsService{
@@ -42,7 +43,7 @@ export class PostsService{
     // }
 
     getPost(id:string){
-        return this.http.get<{_id:string , title: string , content:string, imagePath:string}>('http://localhost:3000/api/posts/'+id);
+        return this.http.get<{_id:string , title: string , content:string, imagePath:string , creator:string}>('http://localhost:3000/api/posts/'+id);
     }
 
     getPostsUpdatedListener(){
@@ -70,9 +71,26 @@ export class PostsService{
             });
     }
 
-    updatePost(id:string , title :string ,content:string){
+    updatePost(id:string , title :string ,content:string , image:File | string){
+        let postData :Post |FormData;
+
+        if(typeof image === "object"){
+            postData = new FormData();
+            postData.append("id",id);
+            postData.append("title",title);
+            postData.append("content",content);
+            postData.append("image",image);
+        }else{
+            postData={
+                id:id,
+                title:title,
+                content: content,
+                imagePath:image,
+                creator:null 
+            }
+        }
         const post ={id:id ,title:title , content:content, imagePath:null};
-        this.http.put('http://localhost:3000/api/posts/'+post.id,post).
+        this.http.put('http://localhost:3000/api/posts/'+post.id,postData).
         subscribe((resp)=>{
         //    const updatePosts =[...this.posts];
         //    const oldPostIndex = updatePosts.findIndex(p => p.id === post.id);
@@ -80,7 +98,7 @@ export class PostsService{
         //    this.posts = updatePosts;
         //    this.postsUpdated.next([...this.posts]);
            this.router.navigate(["/"]);
-        });
+        }); 
     }
 
 

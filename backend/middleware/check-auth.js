@@ -11,4 +11,5 @@ module.exports = (req, res, next) => {
       Console.log(error);
     res.status(401).json({ message: "Auth failed!" });
   }
+
 };

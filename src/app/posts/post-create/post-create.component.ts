@@ -47,8 +47,8 @@ export class PostCreateComponent  implements OnInit{
                             id:postData._id ,
                             title:postData.title,
                             content:postData.content,
-                            imagePath:postData.imagePath
-
+                            imagePath:postData.imagePath,
+                            creator:postData.creator
                             };
                             console.log('------------formdata-----' + this.post);
                        
@@ -86,7 +86,8 @@ export class PostCreateComponent  implements OnInit{
             this.postsService.updatePost(
                 this.postId,
                 this.form.value.title ,
-                this.form.value.content
+                this.form.value.content,
+                this.form.value.creator
                 );
         }
         this.form.reset();
